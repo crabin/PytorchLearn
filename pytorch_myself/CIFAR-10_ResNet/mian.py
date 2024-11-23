@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
+from lenet5 import LeNet5
 
 
 def main():
@@ -19,9 +20,28 @@ def main():
     ]), download=True)
     cifar_test = DataLoader(cifar_test, batch_size=batchsz, shuffle=True)
 
-
     x, label = next(iter(cifar_train))
     print(x.shape, label.shape)
+
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
+    criten = torch.nn.CrossEntropyLoss()
+    model = LeNet5()
+    model.to(device)
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+    # 模型训练
+    for epoch in range(1000):
+        for batchidex, (x, label) in enumerate(cifar_train):
+            x, label = x.to(device), label.to(device)
+            logits = model(x)
+            loss = criten(logits, label)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            print(epoch, batchidex, loss.item())
+
 
 if __name__ == '__main__':
     main()
