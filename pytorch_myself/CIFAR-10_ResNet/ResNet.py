@@ -29,23 +29,21 @@ class ResNet18(nn.Module):
     def __init__(self):
         super(ResNet18, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1),
+            nn.BatchNorm2d(16),
         )
-        self.blk1 = ResBlk(64, 64) 
-        self.blk2 = ResBlk(64, 128)
-        self.blk3 = ResBlk(128, 256)
-        self.blk4 = ResBlk(256, 512)
+        self.blk1 = ResBlk(16, 16) 
+        self.blk2 = ResBlk(16, 32)
+     
 
         
-        self.outlayer = nn.Linear(512 * 32 * 32, 10)
+        self.outlayer = nn.Linear(32 * 32 * 32, 10)
     
     def forward(self, x):
         x = F.relu(self.conv1(x))
         x = self.blk1(x)
         x = self.blk2(x)
-        x = self.blk3(x)
-        x = self.blk4(x)
+    
         x = x.view(x.size(0), -1)
         x  = self.outlayer(x)
         return x
