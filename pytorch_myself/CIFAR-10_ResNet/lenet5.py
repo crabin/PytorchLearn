@@ -39,7 +39,7 @@ def main():
     tmp = torch.randn(2, 3, 32, 32)
     # [b,16,5,5]
     out = net(tmp)
-    print(out.shape)
+    print(out.parms())
 
 
 if __name__ == '__main__':
