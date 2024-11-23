@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from lenet5 import LeNet5
-
+from ResNet import ResNet18
 
 def main():
     # 检查 GPU 是否可用
@@ -43,7 +43,8 @@ def main():
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     criten = torch.nn.CrossEntropyLoss().to(device)
-    model = LeNet5().to(device)
+    # model = LeNet5().to(device)
+    model = ResNet18().to(device)
 
     print(model)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
